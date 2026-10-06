@@ -1,0 +1,1331 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vibrant Mosaic — Exact HTML Layout</title>
+
+<style>
+/* =========================================================
+   EXACT RECREATION — 1536 × 864
+   ---------------------------------------------------------
+   No full-screen screenshot is embedded.
+   The galaxy is a separate BACKGROUND-ONLY asset; all UI
+   elements (sidebar, text, icons, account area, clock) are
+   real HTML/CSS/SVG.
+   ---------------------------------------------------------
+   Required files in the same folder:
+     1) vibrant_mosaic_exact_html.html
+     2) vibrant_mosaic_galaxy_background_only.png
+   ========================================================= */
+
+:root {
+    --W: 1536px;
+    --H: 730px;
+    --TOP: 580px;
+
+    --white: #f6f8fa;
+    --muted: #85a4bc;
+    --blue: #57caff;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100%;
+    background: #000;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    overflow: auto;
+    font-family: Tahoma, "Segoe UI", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: geometricPrecision;
+}
+
+/* =========================================================
+   CANVAS
+   ========================================================= */
+
+.app {
+    position: relative;
+    width: var(--W);
+    height: var(--H);
+    overflow: hidden;
+    background: #091a29;
+    color: var(--white);
+}
+
+/* =========================================================
+   EXACT GALAXY BACKGROUND — ONLY BACKGROUND, NO UI
+   ========================================================= */
+
+.galaxy-background {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1536px;
+    height: 580px;
+    z-index: 1;
+    background-image: url("vibrant_mosaic_galaxy_background_only.png");
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    background-size: 1536px 580px;
+}
+
+/* =========================================================
+   SIDEBAR GLASS PANEL
+   ========================================================= */
+
+.sidebar {
+    position: absolute;
+    left: 33px;
+    top: 88px;
+    width: 308px;
+    height: 466px;
+    z-index: 20;
+
+    padding: 58px 21px 0;
+
+    border: 1px solid rgba(104, 171, 208, .25);
+    border-radius: 21px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(22, 52, 73, .88) 0%,
+            rgba(8, 28, 44, .84) 100%
+        );
+
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.06),
+        inset 0 0 22px rgba(87,170,210,.045),
+        0 17px 35px rgba(0,0,0,.30);
+
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+}
+
+.nav {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.nav-button {
+    position: relative;
+    width: 270px;
+    height: 62px;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 25px;
+
+    padding: 0 25px;
+
+    border: 1px solid rgba(107, 163, 194, .14);
+    border-radius: 18px;
+
+    direction: ltr;
+    text-align: left;
+
+    color: #f2f6f9;
+    background:
+        linear-gradient(
+            180deg,
+            rgba(50, 86, 116, .54) 0%,
+            rgba(21, 49, 71, .63) 100%
+        );
+
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.035),
+        0 4px 10px rgba(0,0,0,.08);
+
+    font: 700 30px/1 Tahoma, "Segoe UI", Arial, sans-serif;
+    cursor: pointer;
+}
+
+.nav-button.active {
+    border-color: rgba(82, 204, 255, .88);
+    background:
+        linear-gradient(
+            180deg,
+            rgba(46, 153, 221, .70) 0%,
+            rgba(28, 106, 170, .73) 100%
+        );
+
+    box-shadow:
+        inset 0 0 20px rgba(75, 205, 255, .16),
+        0 0 16px rgba(26, 163, 225, .20);
+}
+
+.nav-button span:last-child {
+    direction: rtl;
+    white-space: nowrap;
+}
+
+/* =========================================================
+   ICONS — SVG, REAL UI ELEMENTS
+   ========================================================= */
+
+.icon {
+    width: 45px;
+    height: 45px;
+    flex: 0 0 45px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #eff8fd;
+    filter: drop-shadow(0 0 4px rgba(93,207,255,.35));
+}
+
+.icon svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+/* =========================================================
+   ACCOUNT AREA
+   ========================================================= */
+
+.account {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 580px;
+    bottom: 0;
+    z-index: 10;
+
+    border-top: 1px solid rgba(116, 181, 212, .22);
+
+    background:
+        radial-gradient(
+            ellipse 70% 95% at 48% 0%,
+            rgba(19, 55, 79, .18),
+            transparent 70%
+        ),
+        linear-gradient(
+            180deg,
+            #0a1b2b 0%,
+            #091a29 100%
+        );
+}
+
+/* =========================================================
+   ACCOUNT TITLE
+   ========================================================= */
+
+.account-title {
+    position: absolute;
+    left: 63px;
+    top: 21px;
+
+    direction: ltr;
+    white-space: nowrap;
+
+    color: #f4f7fa;
+
+    font-family: Arial, "Segoe UI", sans-serif;
+    font-size: 42px;
+    line-height: 45px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+
+/* =========================================================
+   PROFILE
+   ========================================================= */
+
+.profile-ring {
+    position: absolute;
+    left: 81px;
+    top: 88px;
+    width: 142px;
+    height: 142px;
+
+    border: 3px solid #61caff;
+    border-radius: 50%;
+
+    box-shadow:
+        0 0 16px rgba(67,192,246,.23),
+        inset 0 0 8px rgba(74,194,255,.09);
+}
+
+.profile-icon {
+    position: absolute;
+    left: 108px;
+    top: 113px;
+    width: 88px;
+    height: 88px;
+    color: #68d5ff;
+    filter: drop-shadow(0 0 3px rgba(76,201,255,.30));
+}
+
+.profile-icon svg {
+    width: 100%;
+    height: 100%;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.25;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+/* =========================================================
+   USER INFORMATION
+   ========================================================= */
+
+.user-info {
+    position: absolute;
+    left: 320px;
+    top: 74px;
+    width: 560px;
+
+    direction: rtl;
+    text-align: left;
+}
+
+.user-label {
+    display: block;
+    margin: 0 0 4px;
+
+    color: #88a6bb;
+    font-family: Tahoma, Arial, sans-serif;
+    font-size: 21px;
+    line-height: 25px;
+    font-weight: 500;
+}
+
+.username {
+    display: block;
+
+    direction: ltr;
+    text-align: left;
+    white-space: nowrap;
+
+    color: #f5f8fa;
+    font-family: Arial, "Segoe UI", sans-serif;
+    font-size: 41px;
+    line-height: 44px;
+    font-weight: 700;
+}
+
+.expiry {
+    display: block;
+    margin-top: 17px;
+
+    direction: rtl;
+    text-align: left;
+    white-space: nowrap;
+
+    color: #86a3b8;
+    font-family: Tahoma, Arial, sans-serif;
+    font-size: 23px;
+    line-height: 28px;
+}
+
+.expiry strong {
+    color: #82a1b7;
+    font-weight: 700;
+}
+
+/* =========================================================
+   CLOCK
+   ========================================================= */
+
+.clock {
+    position: absolute;
+    right: 35px;
+    top: 68px;
+
+    display: flex;
+    align-items: flex-start;
+    direction: ltr;
+    white-space: nowrap;
+}
+
+.time {
+    color: #f6f8fa;
+
+    font-family: Arial, "Segoe UI", sans-serif;
+    font-size: 70px;
+    line-height: 72px;
+    font-weight: 700;
+    letter-spacing: -3px;
+}
+
+.am {
+    margin-left: 10px;
+    margin-top: 7px;
+
+    color: #82a3bd;
+
+    font-family: Arial, "Segoe UI", sans-serif;
+    font-size: 21px;
+    line-height: 24px;
+    font-weight: 600;
+}
+
+/* =========================================================
+   RESPONSIVE — PROPORTIONAL SCALE
+   ========================================================= */
+
+@media (max-width: 0px) {
+    .app {
+        width: 100vw;
+        height: calc(100vw * 840 / 1536);
+    }
+
+    .galaxy-background {
+        width: 100%;
+        height: 37.7604vw;
+        background-size: 100% auto;
+    }
+
+    .sidebar {
+        left: 2.1484vw;
+        top: 5.7292vw;
+        width: 20.0521vw;
+        height: 30.3385vw;
+        padding: 3.7760vw 1.3672vw 0;
+        border-radius: 1.3672vw;
+    }
+
+    .nav {
+        gap: .7813vw;
+    }
+
+    .nav-button {
+        width: 17.5781vw;
+        height: 4.0365vw;
+        padding: 0 1.6276vw;
+        gap: 1.6276vw;
+        border-radius: 1.1719vw;
+        font-size: 1.9531vw;
+    }
+
+    .icon {
+        width: 2.9297vw;
+        height: 2.9297vw;
+        flex-basis: 2.9297vw;
+    }
+
+    .account {
+        top: 37.7604vw;
+    }
+
+    .account-title {
+        left: 4.1016vw;
+        top: 1.3672vw;
+        font-size: 2.7344vw;
+        line-height: 2.9297vw;
+    }
+
+    .profile-ring {
+        left: 5.2734vw;
+        top: 5.7292vw;
+        width: 9.2448vw;
+        height: 9.2448vw;
+        border-width: .1953vw;
+    }
+
+    .profile-icon {
+        left: 7.0313vw;
+        top: 7.3568vw;
+        width: 5.7292vw;
+        height: 5.7292vw;
+    }
+
+    .user-info {
+        left: 20.8333vw;
+        top: 4.8177vw;
+        width: 36.4583vw;
+    }
+
+    .user-label {
+        font-size: 1.3672vw;
+        line-height: 1.6276vw;
+    }
+
+    .username {
+        font-size: 2.6693vw;
+        line-height: 2.8646vw;
+    }
+
+    .expiry {
+        margin-top: 1.1068vw;
+        font-size: 1.4974vw;
+        line-height: 1.8229vw;
+    }
+
+    .clock {
+        right: 2.2786vw;
+        top: 4.4271vw;
+    }
+
+    .time {
+        font-size: 4.5573vw;
+        line-height: 4.6875vw;
+    }
+
+    .am {
+        margin-left: .6510vw;
+        margin-top: .4557vw;
+        font-size: 1.3672vw;
+        line-height: 1.5625vw;
+    }
+}
+
+
+/* =========================================================
+   ORIENTATION SUPPORT
+   ---------------------------------------------------------
+   LANDSCAPE:
+     Keep the original 1536×864 composition and scale it
+     proportionally to the available viewport.
+
+   PORTRAIT:
+     Reflow the same visual language into a vertical canvas:
+       1. Galaxy / atmospheric header
+       2. Compact 2×2 navigation grid
+       3. Account information block
+     No horizontal overflow and no squashing of text/icons.
+   ========================================================= */
+
+/* Better viewport behavior on phones/tablets */
+@supports (height: 100dvh) {
+    html, body { min-height: 100dvh; }
+}
+
+/* -------------------------
+   LANDSCAPE ENHANCEMENTS
+   ------------------------- */
+@media (orientation: landscape) {
+    body {
+        width: 100%;
+        min-height: 100vh;
+        overflow: auto;
+    }
+
+    .app {
+        flex: 0 0 auto;
+    }
+}
+
+/* -------------------------
+   PORTRAIT
+   ------------------------- */
+@media (orientation: portrait) {
+
+    html,
+    body {
+        width: 100%;
+        min-height: 100%;
+        overflow-x: hidden;
+        background: #071522;
+    }
+
+    body {
+        display: block;
+    }
+
+    .app {
+        position: relative;
+        width: 100vw;
+        min-width: 0;
+        height: auto;
+        min-height: 100dvh;
+        overflow: hidden;
+        background: #081927;
+    }
+
+    /* =====================================================
+       PORTRAIT TOP / GALAXY
+       ===================================================== */
+
+    .galaxy-background {
+        position: relative;
+        left: auto;
+        top: auto;
+        width: 100%;
+        height: clamp(235px, 43vh, 360px);
+        min-height: 235px;
+        max-height: 360px;
+        z-index: 1;
+
+        background-size: cover;
+        background-position: center center;
+    }
+
+    .galaxy-background::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 34%;
+        pointer-events: none;
+
+        background:
+            linear-gradient(
+                180deg,
+                transparent 0%,
+                rgba(7,22,35,.18) 38%,
+                #091a29 100%
+            );
+    }
+
+    /* =====================================================
+       PORTRAIT NAVIGATION
+       Same order as landscape:
+       الرئيسية
+       الأفلام
+       المسلسلات
+       القنوات
+       ===================================================== */
+
+    .sidebar {
+        position: relative;
+        left: auto;
+        top: auto;
+
+        width: calc(100% - 28px);
+        height: auto;
+
+        margin: -24px 14px 0;
+        padding: 14px;
+
+        z-index: 20;
+
+        border-radius: 20px;
+
+        background:
+            linear-gradient(
+                145deg,
+                rgba(22,52,73,.96) 0%,
+                rgba(8,28,44,.96) 100%
+            );
+
+        border: 1px solid rgba(104,171,208,.27);
+
+        box-shadow:
+            inset 0 1px 0 rgba(255,255,255,.065),
+            inset 0 0 24px rgba(87,170,210,.045),
+            0 16px 36px rgba(0,0,0,.30);
+
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+    }
+
+    .nav {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        gap: 9px;
+    }
+
+    .nav-button {
+        width: 100%;
+        height: 58px;
+
+        min-width: 0;
+        flex: none;
+
+        padding: 0 18px;
+        gap: 15px;
+
+        border-radius: 15px;
+
+        font-size: clamp(18px, 5vw, 24px);
+        line-height: 1;
+    }
+
+    .nav-button span:last-child {
+        overflow: visible;
+        text-overflow: clip;
+        white-space: nowrap;
+    }
+
+    .icon {
+        width: 35px;
+        height: 35px;
+        flex: 0 0 35px;
+    }
+
+    /* =====================================================
+       COMPACT ACCOUNT / INFO CARD
+       ===================================================== */
+
+    .account {
+        position: relative;
+        left: auto;
+        right: auto;
+        top: auto;
+        bottom: auto;
+
+        width: calc(100% - 28px);
+        min-height: 0;
+
+        margin: 14px 14px 20px;
+        padding: 18px 18px 20px;
+
+        border: 1px solid rgba(116,181,212,.18);
+        border-radius: 20px;
+
+        background:
+            radial-gradient(
+                ellipse 90% 120% at 50% 0%,
+                rgba(19,55,79,.24),
+                transparent 70%
+            ),
+            linear-gradient(
+                180deg,
+                #0a1b2b 0%,
+                #091a29 100%
+            );
+
+        box-shadow:
+            inset 0 1px 0 rgba(255,255,255,.035),
+            0 12px 28px rgba(0,0,0,.22);
+
+        overflow: hidden;
+    }
+
+    /* =====================================================
+       TITLE
+       ===================================================== */
+
+    .account-title {
+        position: relative;
+        left: auto;
+        top: auto;
+
+        display: block;
+
+        padding: 0;
+        margin: 0 0 16px;
+
+        direction: ltr;
+        text-align: left;
+        white-space: nowrap;
+
+        color: #f4f7fa;
+
+        font-size: clamp(23px, 6.3vw, 31px);
+        line-height: 1.1;
+        font-weight: 700;
+        letter-spacing: -.3px;
+    }
+
+    /* =====================================================
+       PROFILE — SMALL, PROFESSIONAL
+       ===================================================== */
+
+    .profile-ring {
+        position: absolute;
+
+        left: 18px;
+        top: 71px;
+
+        width: 72px;
+        height: 72px;
+
+        border-width: 2px;
+    }
+
+    .profile-icon {
+        position: absolute;
+
+        left: 31px;
+        top: 83px;
+
+        width: 46px;
+        height: 46px;
+    }
+
+    /* =====================================================
+       USER INFORMATION — COMPACT ROWS
+       ===================================================== */
+
+    .user-info {
+        position: relative;
+
+        left: auto;
+        top: auto;
+
+        width: calc(100% - 82px);
+
+        margin: 0 0 0 82px;
+        padding: 0;
+
+        direction: rtl;
+        text-align: left;
+    }
+
+    .user-label {
+        display: block;
+
+        margin: 0 0 2px;
+
+        color: #87a6bb;
+
+        font-size: clamp(13px, 3.5vw, 16px);
+        line-height: 1.15;
+        font-weight: 500;
+    }
+
+    .username {
+        display: block;
+
+        direction: ltr;
+        text-align: left;
+
+        color: #f5f8fa;
+
+        font-size: clamp(18px, 5vw, 25px);
+        line-height: 1.18;
+        font-weight: 700;
+
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+        letter-spacing: 0;
+    }
+
+    .expiry {
+        display: block;
+
+        margin-top: 8px;
+
+        direction: rtl;
+        text-align: left;
+
+        color: #86a3b8;
+
+        font-size: clamp(12px, 3.35vw, 16px);
+        line-height: 1.3;
+
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .expiry strong {
+        color: #82a1b7;
+        font-weight: 700;
+    }
+
+    /* =====================================================
+       CLOCK — SMALL HORIZONTAL INFORMATION STRIP
+       ===================================================== */
+
+    .clock {
+        position: relative;
+
+        right: auto;
+        top: auto;
+
+        display: flex;
+
+        width: 100%;
+
+        margin: 17px 0 0;
+        padding-top: 12px;
+
+        justify-content: flex-end;
+        align-items: flex-start;
+
+        direction: ltr;
+
+        border-top: 1px solid rgba(112,177,209,.13);
+    }
+
+    .time {
+        color: #f6f8fa;
+
+        font-size: clamp(38px, 11vw, 55px);
+        line-height: .95;
+
+        font-weight: 700;
+
+        letter-spacing: -2px;
+    }
+
+    .am {
+        margin-left: 7px;
+        margin-top: 2px;
+
+        color: #82a3bd;
+
+        font-size: clamp(13px, 3.7vw, 17px);
+        line-height: 1.1;
+
+        font-weight: 600;
+    }
+}
+
+/* =========================================================
+   VERY NARROW PORTRAIT DEVICES
+   ========================================================= */
+
+@media (orientation: portrait) and (max-width: 390px) {
+
+    .galaxy-background {
+        height: 245px;
+        min-height: 0;
+        max-height: 245px;
+    }
+
+    .sidebar {
+        width: calc(100% - 18px);
+        margin-left: 9px;
+        margin-right: 9px;
+        padding: 11px;
+        border-radius: 17px;
+    }
+
+    .nav {
+        gap: 7px;
+    }
+
+    .nav-button {
+        height: 52px;
+        padding: 0 14px;
+        gap: 12px;
+        font-size: 17px;
+        border-radius: 13px;
+    }
+
+    .icon {
+        width: 31px;
+        height: 31px;
+        flex-basis: 31px;
+    }
+
+    .account {
+        width: calc(100% - 18px);
+        margin-left: 9px;
+        margin-right: 9px;
+        padding: 15px 14px 17px;
+        border-radius: 17px;
+    }
+
+    .account-title {
+        margin-bottom: 13px;
+        font-size: 22px;
+    }
+
+    .profile-ring {
+        left: 14px;
+        top: 65px;
+        width: 62px;
+        height: 62px;
+    }
+
+    .profile-icon {
+        left: 25px;
+        top: 75px;
+        width: 40px;
+        height: 40px;
+    }
+
+    .user-info {
+        width: calc(100% - 70px);
+        margin-left: 70px;
+    }
+
+    .user-label {
+        font-size: 12px;
+    }
+
+    .username {
+        font-size: 17px;
+    }
+
+    .expiry {
+        margin-top: 6px;
+        font-size: 11.5px;
+    }
+
+    .clock {
+        margin-top: 14px;
+        padding-top: 10px;
+    }
+
+    .time {
+        font-size: 43px;
+    }
+
+    .am {
+        font-size: 13px;
+    }
+}
+
+/* =========================================================
+   TALL PORTRAIT PHONES — USE EXTRA VERTICAL SPACE NICELY
+   ========================================================= */
+
+@media (orientation: portrait) and (min-height: 850px) {
+
+    .galaxy-background {
+        height: clamp(260px, 38vh, 360px);
+        max-height: 360px;
+    }
+
+    .account {
+        min-height: 0;
+    }
+}
+
+/* =========================================================
+   POSTERS — landscape: row beside the sidebar / portrait: row over the header
+   To use a real image on any poster: style="--img:url('poster.jpg')"
+   ========================================================= */
+:root { --k: 1px; }
+@media (max-width: 0px) { :root { --k: calc(100vw / 1536); } }
+
+.posters {
+    position: absolute;
+    left: calc(380 * var(--k));
+    right: calc(35 * var(--k));
+    top: calc(88 * var(--k));
+    height: calc(466 * var(--k));
+    z-index: 15;
+    direction: rtl;
+}
+.posters-title {
+    margin: 0 calc(6 * var(--k)) calc(10 * var(--k));
+    font: 700 calc(32 * var(--k))/1.2 Tahoma, "Segoe UI", Arial, sans-serif;
+    color: var(--white);
+    text-shadow: 0 2px 12px rgba(0,0,0,.6);
+}
+.poster-row {
+    display: flex;
+    gap: calc(22 * var(--k));
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: calc(14 * var(--k)) calc(6 * var(--k)) calc(26 * var(--k));
+    scrollbar-width: none;
+    scroll-snap-type: x proximity;
+}
+.poster-row::-webkit-scrollbar { display: none; }
+
+.poster {
+    position: relative;
+    flex: 0 0 auto;
+    width: calc(226 * var(--k));
+    height: calc(340 * var(--k));
+    border-radius: calc(16 * var(--k));
+    overflow: hidden;
+    cursor: pointer;
+    scroll-snap-align: start;
+    border: 1px solid rgba(255,255,255,.12);
+    outline: none;
+    background:
+        var(--img, none) center / cover,
+        radial-gradient(circle at 75% 22%, rgba(255,255,255,.26), transparent 45%),
+        linear-gradient(160deg, var(--c1), var(--c2));
+    box-shadow: 0 calc(10 * var(--k)) calc(24 * var(--k)) rgba(0,0,0,.4);
+    transition: transform .2s, box-shadow .2s, border-color .2s;
+}
+.poster:hover,
+.poster:focus-visible {
+    transform: scale(1.05);
+    border-color: rgba(82,204,255,.9);
+    box-shadow: 0 0 calc(18 * var(--k)) rgba(26,163,225,.45), 0 calc(14 * var(--k)) calc(28 * var(--k)) rgba(0,0,0,.5);
+    z-index: 2;
+}
+.poster-badge {
+    position: absolute;
+    top: calc(12 * var(--k));
+    right: calc(12 * var(--k));
+    padding: calc(4 * var(--k)) calc(10 * var(--k));
+    border-radius: 999px;
+    background: rgba(6,20,32,.72);
+    color: #8fdcff;
+    font-size: max(10px, calc(16 * var(--k)));
+    font-weight: 700;
+    direction: ltr;
+}
+.poster-info {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    padding: calc(46 * var(--k)) calc(14 * var(--k)) calc(14 * var(--k));
+    background: linear-gradient(transparent, rgba(4,14,24,.92));
+}
+.poster-name {
+    display: block;
+    color: #fff;
+    font-size: calc(24 * var(--k));
+    font-weight: 700;
+    line-height: 1.2;
+}
+.poster-meta {
+    display: block;
+    margin-top: calc(4 * var(--k));
+    color: var(--muted);
+    font-size: max(10px, calc(16 * var(--k)));
+}
+.nav-button:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+
+@media (orientation: portrait) {
+    :root { --k: 1px; }
+
+    .galaxy-background {
+        height: clamp(200px, 30vh, 280px);
+        min-height: 0;
+        max-height: 280px;
+    }
+    .posters {
+        position: relative;
+        left: auto; right: auto; top: auto;
+        height: auto;
+        margin-top: -84px;
+        z-index: 15;
+    }
+    .posters-title { margin: 0 16px 2px; font-size: clamp(18px, 5vw, 22px); }
+    .poster-row { gap: 12px; padding: 12px 16px 18px; }
+    .poster {
+        width: clamp(112px, 31vw, 150px);
+        height: clamp(168px, 46.5vw, 225px);
+        border-radius: 14px;
+    }
+    .poster-name { font-size: clamp(13px, 3.6vw, 16px); }
+    .poster-meta { font-size: 11px; }
+    .poster-badge { top: 8px; right: 8px; padding: 3px 8px; font-size: 11px; }
+    .poster-info { padding: 30px 10px 10px; }
+    .sidebar { margin-top: 4px; }
+}
+
+/* LOGO — portrait only */
+.brand-logo { display: none; }
+@media (orientation: portrait) {
+    .brand-logo {
+        display: block;
+        position: absolute;
+        top: 28px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: clamp(112px, 30vw, 136px);
+        height: auto;
+        z-index: 16;
+        pointer-events: none;
+        filter: drop-shadow(0 2px 8px rgba(0,0,0,.5));
+    }
+}
+
+@media (orientation: portrait) {
+    .clock { position: absolute; top: 16px; right: 18px; width: auto; margin: 0; padding: 0; border-top: 0; }
+    .time { font-size: clamp(26px, 7.5vw, 32px); line-height: 1; letter-spacing: -1px; }
+    .am { margin-top: 1px; margin-left: 5px; font-size: clamp(11px, 3vw, 13px); }
+}
+
+/* ===== FIT-TO-SCREEN: nothing scrolls, whole UI always visible ===== */
+@media (orientation: landscape) {
+    html, body { height: 100%; min-height: 0; overflow: hidden; background: #091a29; }
+    body { display: block; }
+    .app {
+        position: fixed; left: 50%; top: 50%;
+        transform: translate(-50%, -50%) scale(var(--s, 1));
+        transform-origin: center center;
+    }
+    .account-title { left: 63px; top: 12px; font-size: 28px; line-height: 32px; }
+    .profile-ring { left: 63px; top: 56px; width: 72px; height: 72px; border-width: 2px; }
+    .profile-icon { left: 77px; top: 70px; width: 44px; height: 44px; }
+    .user-info { left: 160px; top: 52px; width: 560px; }
+    .user-label { margin-bottom: 2px; font-size: 16px; line-height: 20px; }
+    .username { font-size: 28px; line-height: 32px; }
+    .expiry { margin-top: 8px; font-size: 17px; line-height: 22px; }
+    .clock { right: 35px; top: 58px; }
+    .time { font-size: 52px; line-height: 54px; letter-spacing: -2px; }
+    .am { margin-left: 8px; margin-top: 6px; font-size: 18px; line-height: 20px; }
+}
+@media (orientation: portrait) {
+    html, body { height: 100%; overflow: hidden; }
+    .app { height: 100vh; height: 100dvh; min-height: 0; display: flex; flex-direction: column; }
+    .galaxy-background { flex: 1 1 0; height: auto; min-height: 0; max-height: none; }
+    .posters { flex: 0 0 auto; margin-top: -8dvh; }
+    .posters-title { margin: 0 16px; font-size: 16px; line-height: 1.3; }
+    .poster-row { gap: 10px; padding: 6px 16px 10px; }
+    .poster { height: clamp(110px, 20dvh, 200px); width: auto; aspect-ratio: 2 / 3; border-radius: 12px; }
+    .sidebar { flex: 0 0 auto; width: calc(100% - 28px); margin: 18px 14px 0; padding: 8px; border-radius: 16px; }
+    .nav { gap: clamp(4px, .8dvh, 7px); }
+    .nav-button { height: clamp(36px, 5.6dvh, 50px); padding: 0 14px; gap: 12px; border-radius: 12px; font-size: clamp(15px, 2.3dvh, 20px); }
+    .icon { width: 26px; height: 26px; flex: 0 0 26px; }
+    .account { flex: 0 0 auto; width: calc(100% - 28px); margin: 8px 14px 10px; padding: 10px 14px 12px; border-radius: 16px; }
+    .account-title { margin: 0 0 6px; font-size: 15px; line-height: 18px; }
+    .profile-ring { left: 14px; top: 34px; width: 46px; height: 46px; }
+    .profile-icon { left: 23px; top: 43px; width: 28px; height: 28px; }
+    .user-info { width: calc(100% - 58px); margin: 0 0 0 58px; }
+    .user-label { font-size: 11px; }
+    .username { font-size: 16px; }
+    .expiry { margin-top: 3px; font-size: 11px; }
+    .clock { top: 8px; right: 14px; }
+    .time { font-size: 22px; }
+    .am { margin-left: 4px; margin-top: 0; font-size: 10px; }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- =====================================================
+         TOP BACKGROUND — THE POSTERS ARE NOT HERE
+         ===================================================== -->
+
+    <div class="galaxy-background" aria-hidden="true"></div>
+
+    <img class="brand-logo" alt="Eaglex Premium" src="data:image/png;base64,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">
+
+    <!-- POSTERS (filled by script below) -->
+    <section class="posters" aria-label="أضيف حديثًا">
+        <h2 class="posters-title">أضيف حديثًا</h2>
+        <div class="poster-row" id="posterRow"></div>
+    </section>
+
+    <!-- =====================================================
+         SIDEBAR
+         ===================================================== -->
+
+    <aside class="sidebar">
+        <nav class="nav" aria-label="التنقل الرئيسي">
+
+            <button class="nav-button active" type="button">
+                <span class="icon" aria-hidden="true">
+                    <svg viewBox="0 0 48 48"><rect x="6" y="12" width="36" height="28" rx="4"/><path d="m15 7 9 5 9-5"/><path d="M24 40v4M16 44h16"/></svg>
+                </span>
+                <span>القنوات</span>
+            </button>
+
+            <button class="nav-button" type="button">
+                <span class="icon" aria-hidden="true">
+                    <svg viewBox="0 0 48 48"><rect x="8" y="6" width="32" height="36" rx="4"/><path d="M16 6v36M32 6v36M8 15h8M8 24h8M8 33h8M32 15h8M32 24h8M32 33h8"/></svg>
+                </span>
+                <span>الأفلام</span>
+            </button>
+
+            <button class="nav-button" type="button">
+                <span class="icon" aria-hidden="true">
+                    <svg viewBox="0 0 48 48"><rect x="6" y="15" width="36" height="25" rx="4"/><path d="M13 9h22"/><path d="m21 22 9 5.5-9 5.5z"/></svg>
+                </span>
+                <span>المسلسلات</span>
+            </button>
+
+            <button class="nav-button" type="button">
+                <span class="icon" aria-hidden="true">
+                    <svg viewBox="0 0 48 48"><path d="M24 41S7 30.5 7 18.5C7 12.8 11.3 9 16.3 9c3.3 0 6.1 1.8 7.7 4.5C25.6 10.8 28.4 9 31.7 9 36.7 9 41 12.8 41 18.5 41 30.5 24 41 24 41z"/></svg>
+                </span>
+                <span>المفضلة</span>
+            </button>
+
+            <button class="nav-button" type="button">
+                <span class="icon" aria-hidden="true">
+                    <svg viewBox="0 0 48 48"><path d="M20.0 10.1 L20.9 4.7 L27.1 4.7 L28.0 10.1 L31.0 11.3 L35.5 8.2 L39.8 12.5 L36.7 17.0 L37.9 20.0 L43.3 20.9 L43.3 27.1 L37.9 28.0 L36.7 31.0 L39.8 35.5 L35.5 39.8 L31.0 36.7 L28.0 37.9 L27.1 43.3 L20.9 43.3 L20.0 37.9 L17.0 36.7 L12.5 39.8 L8.2 35.5 L11.3 31.0 L10.1 28.0 L4.7 27.1 L4.7 20.9 L10.1 20.0 L11.3 17.0 L8.2 12.5 L12.5 8.2 L17.0 11.3z"/><circle cx="24" cy="24" r="6"/></svg>
+                </span>
+                <span>الإعدادات</span>
+            </button>
+
+        </nav>
+    </aside>
+
+    <!-- =====================================================
+         DIVIDER
+         ===================================================== -->
+
+    <div class="divider" aria-hidden="true"></div>
+
+    <!-- =====================================================
+         ACCOUNT & INFO
+         ===================================================== -->
+
+    <section class="account">
+
+        <h1 class="account-title">Account &amp; Info</h1>
+
+        <div class="profile-ring" aria-hidden="true"></div>
+
+        <div class="profile-icon" aria-hidden="true">
+            <svg viewBox="0 0 88 88">
+                <circle cx="44" cy="28" r="13"/>
+                <path d="M19 75c1.8-17 11-25 25-25s23.2 8 25 25"/>
+            </svg>
+        </div>
+
+        <div class="user-info">
+            <div class="user-label">اسم المستخدم</div>
+            <div class="username">Guest_User_A1B2</div>
+            <div class="expiry">
+                تاريخ انتهاء الصلاحية :
+                <strong>2025/12/31</strong>
+            </div>
+        </div>
+
+        <div class="clock" aria-label="09:42 AM">
+            <span class="time">09:42</span>
+            <span class="am">AM</span>
+        </div>
+
+    </section>
+
+</div>
+
+<script>
+/* =========================================================
+   BUTTON STATE
+   ========================================================= */
+
+// [title, meta, rating, color1, color2]
+const POSTERS = [
+    ["ليل المدينة",   "فيلم • 2025",    "8.4", "#8b3dff", "#2a0f6b"],
+    ["رحلة الصحراء",  "مسلسل • 2024",   "8.1", "#ff8a3d", "#7a1f2b"],
+    ["الجزيرة المنسية","فيلم • 2025",    "7.9", "#19d3b5", "#0b4a6b"],
+    ["آخر الشتاء",    "مسلسل • 2025",   "8.7", "#ff4f8b", "#4a1250"],
+    ["عاصفة الذهب",   "فيلم • 2023",    "7.6", "#ffc83d", "#7a3b0c"],
+    ["ظل القمر",      "مسلسل • 2024",   "8.2", "#3d8bff", "#0b1f5c"]
+];
+
+document.getElementById('posterRow').innerHTML = POSTERS.map(([name, meta, rate, c1, c2]) =>
+    `<div class="poster" tabindex="0" role="link" style="--c1:${c1};--c2:${c2}">
+        <span class="poster-badge">★ ${rate}</span>
+        <div class="poster-info"><span class="poster-name">${name}</span><span class="poster-meta">${meta}</span></div>
+    </div>`
+).join('');
+
+function fitLandscape() {
+    const land = innerWidth > innerHeight;
+    document.documentElement.style.setProperty('--s', land ? Math.min(innerWidth / 1536, innerHeight / 730) : 1);
+}
+addEventListener('resize', fitLandscape);
+addEventListener('orientationchange', fitLandscape);
+fitLandscape();
+
+const navButtons = document.querySelectorAll('.nav-button');
+
+navButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+        navButtons.forEach((item) => item.classList.remove('active'));
+        button.classList.add('active');
+    });
+});
+</script>
+
+</body>
+</html>
